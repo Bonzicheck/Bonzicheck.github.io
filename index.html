@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BONZICLICKER II</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            color: #fff;
+        }
+        #character {
+            width: 100px;
+            height: 100px;
+            background-image: url('https://static.wikia.nocookie.net/bonzibuddy/images/1/11/Bonzi_Buddy_Sun_Glasses.png/revision/latest?cb=20180930091349'); /* Замените на путь к вашему изображению */
+            background-size: cover;
+            transition: transform 0.5s;
+        }
+        #character.clicked {
+            transform: rotate(360deg);
+        }
+        #timer, #coins, #profile {
+            font-size: 24px;
+            margin: 20px;
+        }
+        #changeSkin, #changeName {
+            margin: 10px;
+            padding: 10px;
+            cursor: pointer;
+        }
+        #nameInput {
+            margin: 10px;
+            padding: 5px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="profile">Имя: <span id="playerName">Bonzi</span> <button id="changeName">Сменить имя</button></div>
+    <div id="timer">Осталось времени: 120 секунд</div>
+    <div id="coins">bonzicoin: 0</div>
+    <div id="character"></div>
+    <button id="changeSkin">Сменить скин</button>
+
+    <input type="text" id="nameInput" placeholder="Введите новое имя" style="display:none;">
+
+    <script>
+        let coins = 0;
+        let timeLeft = 120; // 2 минуты
+        let timerInterval;
+
+        const character = document.getElementById('character');
+        const coinsDisplay = document.getElementById('coins');
+        const timerDisplay = document.getElementById('timer');
+        const playerNameDisplay = document.getElementById('playerName');
+        const nameInput = document.getElementById('nameInput');
+        const skins = ['https://static.wikia.nocookie.net/bonzibuddy/images/1/11/Bonzi_Buddy_Sun_Glasses.png/revision/latest?cb=20180930091349', 'https://static.wikia.nocookie.net/the-microsoft-agent/images/8/8c/Peedy_Reading.png/revision/latest?cb=20230717023525', 'https://static.wikia.nocookie.net/the-microsoft-agent/images/5/5b/Image_%283%29.gif/revision/latest?cb=20190128062647']; // Добавьте пути к вашим скинам
+        let currentSkinIndex = 0;
+
+        character.addEventListener('click', () => {
+            coins += 1; // Увеличиваем количество монет на 1 за клик
+            coinsDisplay.textContent = `Монеты: ${coins}`;
+            character.classList.add('clicked');
+            setTimeout(() => character.classList.remove('clicked'), 500);
+        });
+
+        document.getElementById('changeSkin').addEventListener('click', () => {
+            currentSkinIndex = (currentSkinIndex + 1) % skins.length;
+            character.style.backgroundImage = `url('${skins[currentSkinIndex]}')`;
+        });
+
+        document.getElementById('changeName').addEventListener('click', () => {
+            nameInput.style.display = 'block';
+            nameInput.focus();
+        });
+
+        nameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                playerNameDisplay.textContent = nameInput.value || 'Игрок';
+                nameInput.value = '';
+                nameInput.style.display = 'none';
+            }
+        });
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = `Осталось времени: ${timeLeft} секунд`;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert(`Сосо брат, у тя ${coins} монет.`);
+                }
+            }, 1000);
+        }
+
+        startTimer();
+    </script>
+
+</body>
+</html>
