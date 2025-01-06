@@ -16,7 +16,7 @@
         #character {
             width: 100px;
             height: 100px;
-            background-image: url('https://cdn.discordapp.com/attachments/1238105566484893762/1325547030948352110/147_20241227010123.png?ex=677c2f5f&is=677adddf&hm=4e0eb7c341815ddda2255a3ed2004a45a442605ed9f761aa8f4bf3f5323b34eb&5edba126a65b41354d15caf8e94f5833629b7220cf5063d&'); /* Замените на путь к вашему изображению */
+            background-image: url('https://cdn.discordapp.com/attachments/1238105566484893762/1325547030948352110/147_20241227010123.png');
             background-size: cover;
             transition: transform 0.5s;
         }
@@ -27,15 +27,22 @@
             font-size: 24px;
             margin: 20px;
         }
-        #changeSkin, #changeName {
+        #changeSkin, #changeName, #uploadAvatar {
             margin: 10px;
             padding: 10px;
             cursor: pointer;
+            background-color: #555;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
         }
         #nameInput {
             margin: 10px;
             padding: 5px;
             font-size: 16px;
+        }
+        #socialLinks {
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -43,11 +50,18 @@
 
     <div id="profile">Имя: <span id="playerName">Bonzi</span> <button id="changeName">Сменить имя</button></div>
     <div id="timer">Осталось времени: 120 секунд</div>
-    <div id="coins">bonzicoin: 0</div>
+    <div id="coins">Монеты: 0</div>
     <div id="character"></div>
     <button id="changeSkin">Сменить скин</button>
+    <button id="uploadAvatar">Загрузить аватар</button>
+    <input type="file" id="avatarInput" accept="image/*" style="display:none;"/>
 
     <input type="text" id="nameInput" placeholder="Введите новое имя" style="display:none;">
+
+    <div id="socialLinks">
+        <a href="https://www.youtube.com/@Bonziclicker2" target="_blank" style="color: #fff;">Youtube</a>
+        <a href="https://t.me/bclicker2channel" target="_blank" style="color: #fff; margin-left: 10px;">Telegram</a>
+    </div>
 
     <script>
         let coins = 0;
@@ -59,7 +73,10 @@
         const timerDisplay = document.getElementById('timer');
         const playerNameDisplay = document.getElementById('playerName');
         const nameInput = document.getElementById('nameInput');
-        const skins = ['https://cdn.discordapp.com/attachments/1238105566484893762/1325547030948352110/147_20241227010123.png?ex=677c2f5f&is=677adddf&hm=4e0eb7c341815ddda2255a3ed2004a45a442605ed9f761aa8f4bf3f5323b34eb&', 'https://cdn.discordapp.com/attachments/1238105566484893762/1325501216192462968/Peedy_Reading_1.png?ex=677c04b4&is=677ab334&hm=56fdf49709ed495010dc29daae761470f89802da782498ef07b29125ad43f953&', 'https://cdn.discordapp.com/attachments/1238105566484893762/1325501203286593668/147_20241227040038.png?ex=677c04b1&is=677ab331&hm=aa7895f52f2db13d0b5ff69c29e36758e2dea8e8306c60ea3cc9c88387f28beb&']; // Добавьте пути к вашим скинам
+        const avatarInput = document.getElementById('avatarInput');
+        const skins = ['https://cdn.discordapp.com/attachments/1238105566484893762/1325547030948352110/147_20241227010123.png', 
+                       'https://cdn.discordapp.com/attachments/1238105566484893762/1325501216192462968/Peedy_Reading_1.png', 
+                       'https://cdn.discordapp.com/attachments/1238105566484893762/1325501203286593668/147_20241227040038.png'];
         let currentSkinIndex = 0;
 
         character.addEventListener('click', () => {
@@ -87,15 +104,40 @@
             }
         });
 
+        avatarInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const img = new Image();
+                img.src = URL.createObjectURL(file);
+                img.onload = function() {
+                    if (img.width <= 780 && img.height <= 780) {
+                        character.style.backgroundImage = `url('${img.src}')`;
+                    } else {
+                        alert('Пж, ава должна быть 780x780 p.');
+                    }
+                };
+            }
+        });
+
         function startTimer() {
             timerInterval = setInterval(() => {
                 timeLeft--;
                 timerDisplay.textContent = `Осталось времени: ${timeLeft} секунд`;
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
-                    alert(`Сосо брат, у тя ${coins} монет.`);
+                    const earnedCoins = Math.floor(Math.random() * (10000 - 2000 + 1)) + 2000;
+                    coins += earnedCoins; // На случай завершения игры зарабатываем монеты
+                    coinsDisplay.textContent = `Монеты: ${coins}`;
+                    alert(`Время истекло! Вы получили ${earnedCoins} монет!`);
+                    resetTimer();
                 }
             }, 1000);
+        }
+
+        function resetTimer() {
+            timeLeft = 120; // Сброс времени на 2 минуты
+            timerDisplay.textContent = `Осталось времени: ${timeLeft} секунд`;
+            startTimer();
         }
 
         startTimer();
