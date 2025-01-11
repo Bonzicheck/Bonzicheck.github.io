@@ -9,9 +9,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            height: 100vh;
             font-family: Arial, sans-serif;
             background-color: #333;
             color: #fff;
+            margin: 0;
         }
         #character {
             width: 100px;
@@ -21,73 +24,83 @@
             transition: transform 0.5s;
         }
         #character.clicked {
-            transform: rotate(360deg);
+            transform: scale(0.9) rotate(360deg);
         }
         #timer, #coins, #profile {
             font-size: 24px;
             margin: 20px;
         }
-        #changeSkin, #changeName, #uploadAvatar {
+        #changeName, #skinChanger, #submitCode {
             margin: 10px;
             padding: 10px;
             cursor: pointer;
-            background-color: #555;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
         }
-        #nameInput {
+        #nameInput, #codeInput {
             margin: 10px;
             padding: 5px;
             font-size: 16px;
         }
-        #socialLinks {
-            margin-top: 20px;
+        #hint {
+            margin-top: 15px;
+            font-size: 16px;
+            color: #FFD700;
+        }
+        #disclaimer {
+            font-size: 14px;
+            color: #ffcc00;
+            margin: 10px;
         }
     </style>
 </head>
 <body>
+    <div id="hint"></div>
+    <div id="profile">Имя: <span id="playerName">Bonzi</span> <button id="changeName">Ник чейндж</button></div>
+    <div id="timer">Осталось времени: <span id="timeLeft">120</span> секунд</div>
+    <div id="coins">bonzicoin: 0</div>
+    <div id="character" onclick="handleClick()"></div>
 
-    <div id="profile">Имя: <span id="playerName">Bonzi</span> <button id="changeName">Сменить имя</button></div>
-    <div id="timer">Осталось времени: 120 секунд</div>
-    <div id="coins">Монеты: 0</div>
-    <div id="character"></div>
-    <button id="changeSkin">Сменить скин</button>
-    <button id="uploadAvatar">щелчок таноса</button>
-    <input type="file" id="avatarInput" accept="image/*" style="display:none;"/>
+    <button id="skinChanger">Скинчейнджер</button>
+    <button id="submitCode">Ввести шифр</button>
+    <input type="text" id="codeInput" placeholder="Введите шифр" style="display:none;">
+    
+    <div id="disclaimer">Нажмите "Ввести шифр", чтобы активировать шифр!</div>
 
     <input type="text" id="nameInput" placeholder="Введите новое имя" style="display:none;">
-
-    <div id="socialLinks">
-        <a href="https://www.youtube.com/@Bonziclicker2" target="_blank" style="color: #fff;">Youtube</a>
-        <a href="https://t.me/bclicker2channel" target="_blank" style="color: #fff; margin-left: 10px;">Telegram</a>
-    </div>
 
     <script>
         let coins = 0;
         let timeLeft = 120; // 2 минуты
         let timerInterval;
+        let currentSkinIndex = 0;
+
+        const skins = [
+            "https://i.postimg.cc/0yBNFn84/147-20241227010123-1.png",
+            "https://i.postimg.cc/PJvkkxp1/Peedy-Reading-1-1.png",
+            "https://i.postimg.cc/QNzTgyjz/147-20241227040038-1.png",
+            // Четвертый скин не должен быть доступен в скинчейнджере
+            "https://i.postimg.cc/zBRPgM5Z/229-20250111201618.png",
+        ];
 
         const character = document.getElementById('character');
         const coinsDisplay = document.getElementById('coins');
-        const timerDisplay = document.getElementById('timer');
+        const timerDisplay = document.getElementById('timeLeft');
         const playerNameDisplay = document.getElementById('playerName');
         const nameInput = document.getElementById('nameInput');
-        const avatarInput = document.getElementById('avatarInput');
-        const skins = ['https://i.postimg.cc/0yBNFn84/147-20241227010123-1.png', 
-                       'https://i.postimg.cc/PJvkkxp1/Peedy-Reading-1-1.png', 
-                       'https://i.postimg.cc/QNzTgyjz/147-20241227040038-1.png'];
-        let currentSkinIndex = 0;
+        const codeInput = document.getElementById('codeInput');
+        const hintsDiv = document.getElementById('hint');
 
-        character.addEventListener('click', () => {
-            coins += 1; // Увеличиваем количество монет на 1 за клик
-            coinsDisplay.textContent = `Монеты: ${coins}`;
+        function handleClick() {
+            coins += 1; // Увеличиваем количество монет на 1
+            coinsDisplay.textContent = `bonzicoin: ${coins}`;
             character.classList.add('clicked');
-            setTimeout(() => character.classList.remove('clicked'), 500);
-        });
+            setTimeout(() => {
+                character.classList.remove('clicked');
+            }, 500); // Убираем класс после анимации
+        }
 
-        document.getElementById('changeSkin').addEventListener('click', () => {
-            currentSkinIndex = (currentSkinIndex + 1) % skins.length;
+        const skinChangerButton = document.getElementById('skinChanger');
+        skinChangerButton.addEventListener('click', () => {
+            currentSkinIndex = (currentSkinIndex + 1) % (skins.length - 1); // Не меняем на четвертый скин
             character.style.backgroundImage = `url('${skins[currentSkinIndex]}')`;
         });
 
@@ -104,44 +117,86 @@
             }
         });
 
-        avatarInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const img = new Image();
-                img.src = URL.createObjectURL(file);
-                img.onload = function() {
-                    if (img.width <= 780 && img.height <= 780) {
-                        character.style.backgroundImage = `url('${img.src}')`;
-                    } else {
-                        alert('Пожалуйста, загрузите изображение не более 780x780 пикселей.');
-                    }
-                };
+        const codes = {
+            "bonzi": { amount: 100, text: "" },
+            "ach": { amount: 0, text: "IдI нахyй" },
+            "2004": { amount: 1000, text: "" },
+            "msagent": { amount: 10000, text: "", setFont: true }, // Изменение шрифта везде
+            "angry": { amount: 100000, text: "", setBg: true, setName: "ULTRASUPERANGRYBINZIN", changeButtons: true, unlockSkin: true }
+        };
+
+        document.getElementById('submitCode').addEventListener('click', () => {
+            codeInput.style.display = 'block';
+            codeInput.focus();
+            showRandomHints(); // Показываем подсказки сразу при открытии поля
+        });
+
+        codeInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const inputCode = codeInput.value.toLowerCase().trim();
+                if (codes[inputCode]) {
+                    activateCode(inputCode);
+                    codeInput.value = '';
+                    codeInput.style.display = 'none'; // Скрыть поле после ввода
+                    hintsDiv.textContent = ''; // Очищаем подсказки
+                } else {
+                    alert('Неверный шифр!');
+                }
             }
         });
+
+        function activateCode(code) {
+            if (codes[code].amount) {
+                coins += codes[code].amount;
+                coinsDisplay.textContent = `bonzicoin: ${coins}`;
+            }
+            if (codes[code].text) {
+                alert(codes[code].text);
+            }
+            if (codes[code].setBg) {
+                document.body.style.backgroundColor = 'red';
+            }
+            if (codes[code].setName) {
+                playerNameDisplay.textContent = codes[code].setName;
+            }
+            if (codes[code].changeButtons) {
+                document.getElementById('changeName').textContent = "I AM ANGRY BONZII";
+                document.getElementById('skinChanger').textContent = "I AM ANGRY BONZII";
+                document.getElementById('submitCode').textContent = "I AM ANGRY BONZII";
+            }
+            if (codes[code].unlockSkin) {
+                currentSkinIndex = skins.length - 1; // Устанавливаем четвертый скин
+                character.style.backgroundImage = `url('${skins[currentSkinIndex]}')`;
+            }
+            if (codes[code].setFont) {
+                document.body.style.fontFamily = 'serif'; // Изменяем шрифт на serif
+            }
+        }
+
+        function showRandomHints() {
+            const hints = ["b...i", "2..4", "a.h", "m.....t", "a...y"];
+            const randomIndex = Math.floor(Math.random() * hints.length);
+            hintsDiv.textContent = `Подсказка шифра: ${hints[randomIndex]}`; // Отображаем подсказку
+        }
 
         function startTimer() {
             timerInterval = setInterval(() => {
                 timeLeft--;
-                timerDisplay.textContent = `Осталось времени: ${timeLeft} секунд`;
+                timerDisplay.textContent = timeLeft;
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
-                    const earnedCoins = Math.floor(Math.random() * (10000 - 2000 + 1)) + 2000;
-                    coins += earnedCoins; // На случай завершения игры зарабатываем монеты
-                    coinsDisplay.textContent = `Монеты: ${coins}`;
-                    alert(`Время истекло! Вы получили ${earnedCoins} монет!`);
+                    alert(`Время вышло! У вас ${coins} монет.`);
                     resetTimer();
                 }
             }, 1000);
         }
 
         function resetTimer() {
-            timeLeft = 120; // Сброс времени на 2 минуты
-            timerDisplay.textContent = `Осталось времени: ${timeLeft} секунд`;
+            timeLeft = 120;
             startTimer();
         }
 
         startTimer();
     </script>
-
 </body>
-</html>
+    </html>
