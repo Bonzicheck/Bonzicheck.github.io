@@ -185,7 +185,7 @@
                 timerDisplay.textContent = timeLeft;
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
-                    alert(`Время вышло! У вас ${coins} монет.`);
+                    alert(`arcade: время вышло, счётчик показывает что у вас ${coins} бонзикоинов, можете дальше тапать`);
                     resetTimer();
                 }
             }, 1000);
