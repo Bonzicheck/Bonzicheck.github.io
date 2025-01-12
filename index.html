@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BONZICLICKER II / 2</title>
+    <title>BONZICLICKER 2</title>
     <style>
         body {
             display: flex;
@@ -12,8 +12,8 @@
             justify-content: center;
             height: 100vh;
             font-family: Arial, sans-serif;
-            background-color: #3C1A50;
-            color: #fff;
+            background-color: #421954;
+            color: #7FD47F;
             margin: 0;
         }
         #character {
@@ -60,10 +60,10 @@
     <div id="character" onclick="handleClick()"></div>
 
     <button id="skinChanger">Скинчейнджер</button>
-    <button id="submitCode">Ввести шифр</button>
-    <input type="text" id="codeInput" placeholder="Введите шифр" style="display:none;">
+    <button id="submitCode">Написать промо</button>
+    <input type="text" id="codeInput" placeholder="Введите ваш промо" style="display:none;">
     
-    <div id="disclaimer">Нажмите "Ввести шифр", чтобы активировать шифр!</div>
+    <div id="disclaimer">Нажмите "Написать промо", чтобы активировать промокод!</div>
 
     <input type="text" id="nameInput" placeholder="Введите новое имя" style="display:none;">
 
@@ -119,11 +119,20 @@
 
         const codes = {
             "bonzi": { amount: 100, text: "" },
+            "baran": { amount: 200, text: "" },
             "ach": { amount: 0, text: "IдI нахyй" },
+            "super": { amount: 1000000, text: "бупер брадок зупер сраток векл" },
+            
+            "brad": { amount: 500, text: "" },
+            "leader": { amount: 10000, text: "" },
+            
             "2004": { amount: 1000, text: "" },
+            
+            "ga": { amount: 0, text: "аяко: 4'д Га:ну ладно *У га появилось 0 бонзикоинов, расшифруй другой код* " },
+           
             "msagent": { amount: 10000, text: "", setFont: true }, // Изменение шрифта везде
             "angry": { amount: 100000, text: "", setBg: true, setName: "ULTRASUPERANGRYBINZIN", changeButtons: true, unlockSkin: true }
-        };
+           };
 
         document.getElementById('submitCode').addEventListener('click', () => {
             codeInput.style.display = 'block';
@@ -140,7 +149,7 @@
                     codeInput.style.display = 'none'; // Скрыть поле после ввода
                     hintsDiv.textContent = ''; // Очищаем подсказки
                 } else {
-                    alert('Неверный шифр!');
+                    alert('404 - код не найден!');
                 }
             }
         });
@@ -160,9 +169,9 @@
                 playerNameDisplay.textContent = codes[code].setName;
             }
             if (codes[code].changeButtons) {
-                document.getElementById('changeName').textContent = "I AM ANGRY BONZII";
-                document.getElementById('skinChanger').textContent = "I AM ANGRY BONZII";
-                document.getElementById('submitCode').textContent = "I AM ANGRY BONZII";
+                document.getElementById('changeName').textContent = "Angry mode enabled";
+                document.getElementById('skinChanger').textContent = "I MA KILL U SUPERSONIC SPEED";
+                document.getElementById('submitCode').textContent = "I AM ANGRY";
             }
             if (codes[code].unlockSkin) {
                 currentSkinIndex = skins.length - 1; // Устанавливаем четвертый скин
@@ -174,9 +183,9 @@
         }
 
         function showRandomHints() {
-            const hints = ["b...i", "2..4", "a.h", "m.....t", "a...y"];
+            const hints = ["b...i", "2..4", "a.h", "m.....t", "a...y", "b...n", "b..d", "s...r", "bh (ceaser c01)" ];
             const randomIndex = Math.floor(Math.random() * hints.length);
-            hintsDiv.textContent = `Подсказка шифра: ${hints[randomIndex]}`; // Отображаем подсказку
+            hintsDiv.textContent = `пол кода: ${hints[randomIndex]}`; // Отображаем подсказку
         }
 
         function startTimer() {
@@ -185,7 +194,7 @@
                 timerDisplay.textContent = timeLeft;
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
-                    alert(`arcade: время вышло, счётчик показывает что у вас ${coins} бонзикоинов, можете дальше тапать`);
+                    alert(`Время вышло! У вас ${coins} монет.`);
                     resetTimer();
                 }
             }, 1000);
@@ -199,4 +208,4 @@
         startTimer();
     </script>
 </body>
-    </html>
+</html>
