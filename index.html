@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+A<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -55,7 +55,7 @@
 <body>
     <div id="hint"></div>
     <div id="profile">Имя: <span id="playerName">Bonzi</span> <button id="changeName">Ник чейндж</button></div>
-    <div id="timer">Осталось времени: <span id="timeLeft">120</span> секунд</div>
+    <div id="timer">Arcad'ное время: <span id="timeLeft">120</span> сек.</div>
     <div id="coins">bonzicoin: 0</div>
     <div id="character" onclick="handleClick()"></div>
 
@@ -194,7 +194,7 @@
                 timerDisplay.textContent = timeLeft;
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
-                    alert(`Время вышло! У вас ${coins} монет.`);
+                    alert(`Buddy arcader: Время вышло, счёт говорит что у вас ${coins} бонзикоинов, Наслаждаетесь дальше! И я буду дальше этим заниматься`);
                     resetTimer();
                 }
             }, 1000);
