@@ -63,7 +63,7 @@
     <button id="submitCode">Написать промо</button>
     <input type="text" id="codeInput" placeholder="Введите ваш промо" style="display:none;">
     
-    <div id="disclaimer">Нажмите "Написать промо", чтобы активировать промокод!</div>
+    <div id="disclaimer">Нажмите "Написать промо", чтобы открыть подсказку, и нажмите Enter чтобы активировать код!</div>
 
     <input type="text" id="nameInput" placeholder="Введите новое имя" style="display:none;">
 
@@ -128,10 +128,10 @@
             
             "2004": { amount: 1000, text: "" },
             
-            "ga": { amount: 0, text: "аяко: 4'д Га:ну ладно *У га появилось 0 бонзикоинов, расшифруй другой код* " },
+            "ga": { amount: 0, text: "аяко: д-д-д-д Га:ну ладно *У га появилось 0 бонзикоинов, расшифруй другой код* " },
            
             "msagent": { amount: 10000, text: "", setFont: true }, // Изменение шрифта везде
-            "angry": { amount: 100000, text: "", setBg: true, setName: "ULTRASUPERANGRYBINZIN", changeButtons: true, unlockSkin: true }
+            "angry": { amount: 100000, text: "", setBg: true, setName: "EMIN3M", changeButtons: true, unlockSkin: true }
            };
 
         document.getElementById('submitCode').addEventListener('click', () => {
@@ -169,9 +169,9 @@
                 playerNameDisplay.textContent = codes[code].setName;
             }
             if (codes[code].changeButtons) {
-                document.getElementById('changeName').textContent = "Angry mode enabled";
-                document.getElementById('skinChanger').textContent = "I MA KILL U SUPERSONIC SPEED";
-                document.getElementById('submitCode').textContent = "I AM ANGRY";
+                document.getElementById('changeName').textContent = "ЗЛАЯ СМЕНА НИКА";
+                document.getElementById('skinChanger').textContent = "СУКА НЕ НАЖИМАЙ ТЫ ТАК МЕНЯ ИЗГОНИШЬ";
+                document.getElementById('submitCode').textContent = "ЗЛОЕ ВВЕДЕНИЕ ШИФРА";
             }
             if (codes[code].unlockSkin) {
                 currentSkinIndex = skins.length - 1; // Устанавливаем четвертый скин
@@ -183,7 +183,7 @@
         }
 
         function showRandomHints() {
-            const hints = ["b...i", "2..4", "a.h", "m.....t", "a...y", "b...n", "b..d", "s...r", "bh (ceaser c01)" ];
+            const hints = ["b...i", "2..4", "a.h", "m.....t", "a...y", "b...n", "b..d", "s...r", "7-1 (шифр)" ];
             const randomIndex = Math.floor(Math.random() * hints.length);
             hintsDiv.textContent = `пол кода: ${hints[randomIndex]}`; // Отображаем подсказку
         }
@@ -194,7 +194,7 @@
                 timerDisplay.textContent = timeLeft;
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
-                    alert(`Buddy arcader: Время вышло, счёт говорит что у вас ${coins} бонзикоинов, Наслаждаетесь дальше, я не знаю как вас зовут, но я буду дальше этим заниматься`);
+                    alert(`Buddy arcader: Время вышло, счёт говорит что у вас ${coins} бонзикоинов, я не знаю как вас зовут, но я буду дальше считать до 1 минуты`);
                     resetTimer();
                 }
             }, 1000);
