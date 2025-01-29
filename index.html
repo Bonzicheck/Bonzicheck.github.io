@@ -60,10 +60,10 @@
     <div id="character" onclick="handleClick()"></div>
 
     <button id="skinChanger">Скинчейнджер</button>
-    <button id="submitCode">Написать промо</button>
+    <button id="submitCode">Поле для промо</button>
     <input type="text" id="codeInput" placeholder="Введите ваш промо" style="display:none;">
     
-    <div id="disclaimer">Нажмите "Написать промо", чтобы открыть подсказку, и нажмите Enter чтобы активировать код!</div>
+    <div id="disclaimer">Бонзе бахде, с днюхой!</div>
 
     <input type="text" id="nameInput" placeholder="Введите новое имя" style="display:none;">
 
@@ -194,7 +194,7 @@
                 timerDisplay.textContent = timeLeft;
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
-                    alert(`Buddy arcader: Время вышло, счёт говорит что у вас ${coins} бонзикоинов, я не знаю как вас зовут, но я буду дальше считать до 1 минуты`);
+                    alert(`Buddy arcader: Время вышло, счёт говорит что у вас ${coins} бонзикоинов, я буду дальше считать до 1 минуты`);
                     resetTimer();
                 }
             }, 1000);
