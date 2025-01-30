@@ -13,7 +13,7 @@
             height: 100vh;
             font-family: Arial, sans-serif;
             background-color: #421954;
-            color: #7FD47F;
+            color: #39B22E;
             margin: 0;
         }
         #character {
@@ -43,7 +43,7 @@
         #hint {
             margin-top: 15px;
             font-size: 16px;
-            color: #FFD700;
+            color: #39B22E;
         }
         #disclaimer {
             font-size: 14px;
@@ -55,7 +55,7 @@
 <body>
     <div id="hint"></div>
     <div id="profile">Имя: <span id="playerName">Bonzi</span> <button id="changeName">Ник чейндж</button></div>
-    <div id="timer">Arcad'ное время: <span id="timeLeft">60</span> сек.</div>
+    <div id="timer">Оригинал @BonziClicker_Bot<span id="timeLeft"></span></div>
     <div id="coins">bonzicoin: 0</div>
     <div id="character" onclick="handleClick()"></div>
 
@@ -63,9 +63,9 @@
     <button id="submitCode">Поле для промо</button>
     <input type="text" id="codeInput" placeholder="Введите ваш промо" style="display:none;">
     
-    <div id="disclaimer">Бонзе бахде, с днюхой!</div>
+    <div id="disclaimer">Вводя спец промокоды, счёт нелегален!</div>
 
-    <input type="text" id="nameInput" placeholder="Введите новое имя" style="display:none;">
+    <input type="text" id="nameInput" placeholder="Введите новый ник" style="display:none;">
 
     <script>
         let coins = 0;
@@ -188,24 +188,6 @@
             hintsDiv.textContent = `пол кода: ${hints[randomIndex]}`; // Отображаем подсказку
         }
 
-        function startTimer() {
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                timerDisplay.textContent = timeLeft;
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    alert(`Buddy arcader: Время вышло, счёт говорит что у вас ${coins} бонзикоинов, я буду дальше считать до 1 минуты`);
-                    resetTimer();
-                }
-            }, 1000);
-        }
-
-        function resetTimer() {
-            timeLeft = 60;
-            startTimer();
-        }
-
-        startTimer();
     </script>
 </body>
-    </html>
+</html>
